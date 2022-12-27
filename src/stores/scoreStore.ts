@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import {choice} from 'src/types';
 
 export const scoreStore = defineStore('counter', () => {
@@ -26,14 +26,18 @@ export const scoreStore = defineStore('counter', () => {
       passIncrement();
     }
   }
+  const championIndex = computed(() => score.value.choices.length + 1)
+
   return {
     score,
     smashIncrement,
     passIncrement,
     setCurrentId,
-    choose
+    choose,
+    championIndex
   };
 });
+// export default scoreStore;
 //
 // export const scoreStore = defineStore('counter', {
 //   state: () => ({

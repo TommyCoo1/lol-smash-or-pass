@@ -3,8 +3,9 @@
     <template #body>
 
       <div class="row justify-center">
-        <q-card class="my-card">
-          <q-img src="https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Aatrox_0.jpg">
+        <q-card class="champion-card">
+          <q-img :src="state.champion.img"
+                 spinner-color="white">
             <div class="absolute-bottom">
               <div class="text-h6">TEST</div>
               <div class="text-subtitle2">by John Doe</div>
@@ -14,15 +15,27 @@
       </div>
       <div class="q-pa-md q-gutter-y-md">
         <div class="row justify-center">
-          <q-btn color="red" label="Pass" icon="warning "/>
-          <div class="col-1"/>
-          <q-btn color="green" label="Pass" icon="favorite_border"/>
+          <!--          <q-btn color="red" label="Pass" icon="warning "/>-->
+          <q-card class="smash-pass-score-card bg-red-5 text-h6 text-white"> Pass:
+            {{ store.score.passes }}
+          </q-card>
+          <div class="col-2">
+            <!--            <q-card class="champion-index-card bg-grey text-h6 text-white" square=true>Champion-->
+            <!--              {{ store.score.championIndex }} of 162-->
+            <!--            </q-card>-->
+          </div>
+          <!--          <q-btn color="green" label="Smash" icon="favorite_border"/>-->
           <!--          <q-btn color="black" label="Test" icon="favorite_border" @click="score.increment" />-->
-
+          <q-card class="smash-pass-score-card bg-green-5 text-h6 text-white"> Smash:
+            {{ store.score.smashes }}
+          </q-card>
         </div>
         <q-btn-group spread>
-          <q-btn color="red" label="Pass" icon="warning "/>
-          <q-btn color="green" label="Smash" icon="favorite_border"/>
+          <q-btn color="red" label="Pass" icon="warning "
+                 @click="store.choose({id:'aatrox',smash:false})"/>
+          <q-btn color="green" label="Smash" icon="favorite_border"
+                 @click="store.choose({id:'aatrox',smash:true})"/>
+          <!--          define state variable for champion and give -->
           <!--          <q-btn color="black" label="Test" icon="favorite_border" @click="score.increment" />-->
         </q-btn-group>
       </div>
@@ -30,18 +43,37 @@
     </template>
   </MainLayout>
 </template>
-
-<script setup>
+v
+<script setup
+        lang="ts">
 import MainLayout from '../layouts/MainLayout.vue'
 import {scoreStore} from '../stores/scoreStore';
+import {onBeforeMount, reactive} from 'vue';
+import {Champion} from 'src/types';
+import {api} from 'boot/axios';
 
-// Auswahl speichern im storage Champion
+interface State {
+  champion: Champion // | null
+}
+
+const state = reactive<State>({
+  // champion: null
+
+  champion: {
+    id: '',
+    key: 0,
+    name: '',
+    title: '',
+    blurb: '',
+    img: ''
+  }
+})
+const store = scoreStore();
+
+// Beim Start der Anwendung /next champion holen
+// (alle Champion Objekte holen abfragen oder nur alle 20 Champions immer wieder abfragen, nur )
 //
-// Objekte Champions als Interface speichern interface exportieren, Champions enthalten bildadresse und alle Standard Attribute aus dem Champion Backend Objekt
-//
-// Beim Start der Anwendung alle Champion Objekte holen abfragen oder nur alle 20 Champions immer wieder abfragen
-//
-// Bei Smash bei Smash oder Pass Champion ID im storage speichern und zum nächsten Champion Wechsel
+// Bei Smash bei Smash oder Pass Champion ID im storage speichern und zum nächsten Champion Wechsel mit next und übergabe champion id
 
 let test = 'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Aatrox_0.jpg' +
   'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Ahri_0.jpg' +
@@ -54,13 +86,35 @@ let test = 'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Aatrox_
   'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Aphelios_0.jpg' +
   'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Ashe_0.jpg'
 
-const score = scoreStore();
+onBeforeMount(() => {
+  fetchChampion()
+})
 
+const fetchChampion = () => {
+  return api.post<Champion[]>('champion/next', {
+    champion: state.champion.id? state.champion : null
+  })
+}
 
 </script>
 
-<style lang="sass" scoped>
-.my-card
-  width: 100%
-  max-width: 20%
+<style lang="css" scoped>
+.champion-card {
+  width: 100%;
+  max-width: 20%;
+}
+
+.smash-pass-score-card {
+  width: 100%;
+  /*max-height: 100%;*/
+  height: 50px;
+  max-width: 13%;
+}
+
+.champion-index-card {
+  width: 100%;
+  /*max-height: 100%;*/
+  height: 50px;
+  max-width: 100%;
+}
 </style>
