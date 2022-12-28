@@ -7,8 +7,8 @@
           <q-img :src="state.champion.img"
                  spinner-color="white">
             <div class="absolute-bottom">
-              <div class="text-h6">TEST</div>
-              <div class="text-subtitle2">by John Doe</div>
+              <div class="text-h6">{{ state.champion.title }}</div>
+              <div class="text-subtitle2">{{ state.champion.blurb }}</div>
             </div>
           </q-img>
         </q-card>
@@ -32,9 +32,9 @@
         </div>
         <q-btn-group spread>
           <q-btn color="red" label="Pass" icon="warning "
-                 @click="store.choose({id:'aatrox',smash:false})"/>
+                 @click="choose(false)"/>
           <q-btn color="green" label="Smash" icon="favorite_border"
-                 @click="store.choose({id:'aatrox',smash:true})"/>
+                 @click="choose(true)"/>
           <!--          define state variable for champion and give -->
           <!--          <q-btn color="black" label="Test" icon="favorite_border" @click="score.increment" />-->
         </q-btn-group>
@@ -43,7 +43,7 @@
     </template>
   </MainLayout>
 </template>
-v
+
 <script setup
         lang="ts">
 import MainLayout from '../layouts/MainLayout.vue'
@@ -91,9 +91,38 @@ onBeforeMount(() => {
 })
 
 const fetchChampion = () => {
-  return api.post<Champion[]>('champion/next', {
-    champion: state.champion.id? state.champion : null
-  })
+  // console.log(state.champion)
+  // const champion = JSON.stringify({
+  //   champion: state.champion
+  // })
+  // const champion = JSON.stringify({
+  //   id: state.champion.id,
+  //   key: state.champion.key,
+  //   name: state.champion.name,
+  //   title: state.champion.title,
+  //   blurb: state.champion.blurb,
+  //   img: state.champion.img
+  // })
+  // console.log(state.champion)
+  const champ = state.champion
+  api.post<Champion>('champion/next', {
+    champion: champ
+  }).then(
+    champ => {
+      const oldChamp = state.champion
+      const newChamp = champ.data
+      console.log('This is the old champ:')
+      console.log(oldChamp)
+      console.log('This is the new champ:' + newChamp)
+      console.log(newChamp)
+      state.champion = champ.data
+    }
+  )
+}
+
+const choose = (smash: boolean) => {
+  store.choose({id: state.champion.id, smash: smash})
+  fetchChampion()
 }
 
 </script>

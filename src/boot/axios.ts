@@ -14,7 +14,7 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: 'http://localhost:9000/#/',
+  baseURL: 'http://localhost:8080/',
   headers: {// TODO tommy maybe remove
     Accept: 'application/json',
     'Content-Type': 'application/json; charset=utf-8',
