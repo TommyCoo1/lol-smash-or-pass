@@ -14,21 +14,29 @@
           </q-img>
         </q-card>
       </div>
-      <div class="q-pa-md q-gutter-y-md">
+      <div class="q-pa-md q-gutter-y-sm">
         <div class="row justify-center">
           <!--          <q-btn color="red" label="Pass" icon="warning "/>-->
-          <q-card class="smash-pass-score-card bg-red-5 text-h6 text-white"> Pass:
-            {{ store.score.passes }}
+          <q-card class="smash-pass-score-card bg-red-4 text-h6 text-white">
+            <div class="row flex-center">
+              Pass:
+              {{ store.score.passes }}
+            </div>
           </q-card>
           <div class="col-2">
+            <div class="row justify-center text-h4">
+              <p>Champ {{ store.championIndex }} of 162</p>
+            </div>
             <!--            <q-card class="champion-index-card bg-grey text-h6 text-white" square=true>Champion-->
             <!--              {{ store.score.championIndex }} of 162-->
             <!--            </q-card>-->
           </div>
-          <!--          <q-btn color="green" label="Smash" icon="favorite_border"/>-->
-          <!--          <q-btn color="black" label="Test" icon="favorite_border" @click="score.increment" />-->
-          <q-card class="smash-pass-score-card bg-green-5 text-h6 text-white"> Smash:
-            {{ store.score.smashes }}
+          <q-card class="smash-pass-score-card bg-green-4 text-h6 text-white">
+
+            <div class="row flex-center">
+              Smash:
+              {{ store.score.smashes }}
+            </div>
           </q-card>
         </div>
         <q-btn-group spread>
@@ -97,6 +105,9 @@ onBeforeMount(() => {
 // }
 
 async function fetchChampion() {
+  if(state.champion.id == 'Zyra'){
+
+  }
   const fetchedChampion: AxiosResponse<Champion> = await api.post<Champion>('champion/next',
     {
       id: state.champion.id,
