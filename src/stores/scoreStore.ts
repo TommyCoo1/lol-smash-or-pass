@@ -27,6 +27,12 @@ export const scoreStore = defineStore('counter', () => {
     }
   }
   const championIndex = computed(() => score.value.choices.length + 1)
+  const resetScore = () => {
+    score.value.choices = []
+    score.value.currentId = ''
+    score.value.passes = 0
+    score.value.smashes = 0
+  }
 
   return {
     score,
@@ -34,7 +40,8 @@ export const scoreStore = defineStore('counter', () => {
     passIncrement,
     setCurrentId,
     choose,
-    championIndex
+    championIndex,
+    resetScore
   };
 });
 // export default scoreStore;

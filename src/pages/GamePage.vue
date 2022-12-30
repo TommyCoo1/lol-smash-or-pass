@@ -7,6 +7,7 @@
           <q-img :src="state.champion.img"
                  spinner-color="white">
             <div class="absolute-bottom">
+              <div class="text-h4">{{ state.champion.name }}</div>
               <div class="text-h6">{{ state.champion.title }}</div>
               <div class="text-subtitle2">{{ state.champion.blurb }}</div>
             </div>
@@ -33,6 +34,10 @@
         <q-btn-group spread>
           <q-btn color="red" label="Pass" icon="warning "
                  @click="choose(false)"/>
+          <div>
+            <q-btn color="grey" label="Reset"
+                   @click="resetScore"/>
+          </div>
           <q-btn color="green" label="Smash" icon="favorite_border"
                  @click="choose(true)"/>
           <!--          define state variable for champion and give -->
@@ -47,10 +52,11 @@
 <script setup
         lang="ts">
 import MainLayout from '../layouts/MainLayout.vue'
-import {scoreStore} from '../stores/scoreStore';
+import {scoreStore} from 'stores/scoreStore';
 import {onBeforeMount, reactive} from 'vue';
 import {Champion} from 'src/types';
 import {api} from 'boot/axios';
+import {AxiosResponse} from 'axios';
 
 interface State {
   champion: Champion // | null
@@ -70,58 +76,54 @@ const state = reactive<State>({
 })
 const store = scoreStore();
 
-// Beim Start der Anwendung /next champion holen
-// (alle Champion Objekte holen abfragen oder nur alle 20 Champions immer wieder abfragen, nur )
-//
-// Bei Smash bei Smash oder Pass Champion ID im storage speichern und zum nächsten Champion Wechsel mit next und übergabe champion id
-
-let test = 'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Aatrox_0.jpg' +
-  'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Ahri_0.jpg' +
-  'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Akali_0.jpg' +
-  'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Akshan_0.jpg' +
-  'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Alistar_0.jpg' +
-  'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Amumu_0.jpg' +
-  'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Anivia_0.jpg' +
-  'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Annie_0.jpg' +
-  'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Aphelios_0.jpg' +
-  'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Ashe_0.jpg'
-
 onBeforeMount(() => {
   fetchChampion()
 })
 
-const fetchChampion = () => {
-  // console.log(state.champion)
-  // const champion = JSON.stringify({
-  //   champion: state.champion
-  // })
-  // const champion = JSON.stringify({
-  //   id: state.champion.id,
-  //   key: state.champion.key,
-  //   name: state.champion.name,
-  //   title: state.champion.title,
-  //   blurb: state.champion.blurb,
-  //   img: state.champion.img
-  // })
-  // console.log(state.champion)
-  const champ = state.champion
-  api.post<Champion>('champion/next', {
-    champion: champ
-  }).then(
-    champ => {
-      const oldChamp = state.champion
-      const newChamp = champ.data
-      console.log('This is the old champ:')
-      console.log(oldChamp)
-      console.log('This is the new champ:' + newChamp)
-      console.log(newChamp)
-      state.champion = champ.data
-    }
-  )
+// const fetchChampion = async () => {
+//   const champ = state.champion
+//   await api.post<Champion>('champion/next', {
+//     id: state.champion.id,
+//     key: state.champion.key,
+//     name: state.champion.name,
+//     title: state.champion.title,
+//     blurb: state.champion.blurb,
+//     img: state.champion.img
+//   }).then(
+//     champ => {
+//       state.champion = champ.data
+//     }
+//   )
+// }
+
+async function fetchChampion() {
+  const fetchedChampion: AxiosResponse<Champion> = await api.post<Champion>('champion/next',
+    {
+      id: state.champion.id,
+      key: state.champion.key,
+      name: state.champion.name,
+      title: state.champion.title,
+      blurb: state.champion.blurb,
+      img: state.champion.img
+    })
+  state.champion = fetchedChampion.data
 }
 
 const choose = (smash: boolean) => {
   store.choose({id: state.champion.id, smash: smash})
+  fetchChampion()
+}
+
+const resetScore = () => {
+  store.resetScore()
+  state.champion = {
+    id: '',
+    key: 0,
+    name: '',
+    title: '',
+    blurb: '',
+    img: ''
+  }
   fetchChampion()
 }
 
@@ -140,10 +142,10 @@ const choose = (smash: boolean) => {
   max-width: 13%;
 }
 
-.champion-index-card {
-  width: 100%;
-  /*max-height: 100%;*/
-  height: 50px;
-  max-width: 100%;
-}
+/*.champion-index-card {*/
+/*  width: 100%;*/
+/*  !*max-height: 100%;*!*/
+/*  height: 50px;*/
+/*  max-width: 100%;*/
+/*}*/
 </style>
