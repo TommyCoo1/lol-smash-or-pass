@@ -16,7 +16,6 @@
       </div>
       <div class="q-pa-md q-gutter-y-sm">
         <div class="row justify-center">
-          <!--          <q-btn color="red" label="Pass" icon="warning "/>-->
           <q-card class="smash-pass-score-card bg-red-4 text-h6 text-white">
             <div class="row flex-center">
               Pass:
@@ -27,9 +26,6 @@
             <div class="row justify-center text-h4">
               <p>Champ {{ store.championIndex }} of 162</p>
             </div>
-            <!--            <q-card class="champion-index-card bg-grey text-h6 text-white" square=true>Champion-->
-            <!--              {{ store.score.championIndex }} of 162-->
-            <!--            </q-card>-->
           </div>
           <q-card class="smash-pass-score-card bg-green-4 text-h6 text-white">
 
@@ -45,6 +41,8 @@
           <div>
             <q-btn color="grey" label="Reset"
                    @click="resetScore"/>
+            <!--            <q-btn color="grey" label="Reset"-->
+            <!--                   @click="resetScore"/>-->
           </div>
           <q-btn color="green" label="Smash" icon="favorite_border"
                  @click="choose(true)"/>
@@ -52,7 +50,6 @@
           <!--          <q-btn color="black" label="Test" icon="favorite_border" @click="score.increment" />-->
         </q-btn-group>
       </div>
-
     </template>
   </MainLayout>
 </template>
@@ -65,13 +62,17 @@ import {onBeforeMount, reactive} from 'vue';
 import {Champion} from 'src/types';
 import {api} from 'boot/axios';
 import {AxiosResponse} from 'axios';
+// import {useQuasar} from 'quasar';
+//
+// import FinishDialog from '../components/FinishDialog.vue'
+// import TestDialog from '../components/TestDialog.vue'
+import {useRouter} from 'vue-router';
 
 interface State {
   champion: Champion // | null
 }
 
 const state = reactive<State>({
-  // champion: null
 
   champion: {
     id: '',
@@ -82,7 +83,9 @@ const state = reactive<State>({
     img: ''
   }
 })
-const store = scoreStore();
+// const {dialog, notify} = useQuasar()
+const store = scoreStore()
+const router = useRouter()
 
 onBeforeMount(() => {
   fetchChampion()
@@ -105,9 +108,6 @@ onBeforeMount(() => {
 // }
 
 async function fetchChampion() {
-  if(state.champion.id == 'Zyra'){
-
-  }
   const fetchedChampion: AxiosResponse<Champion> = await api.post<Champion>('champion/next',
     {
       id: state.champion.id,
@@ -121,8 +121,36 @@ async function fetchChampion() {
 }
 
 const choose = (smash: boolean) => {
-  store.choose({id: state.champion.id, smash: smash})
-  fetchChampion()
+  if (state.champion.id == 'Zyra') {//TODO Tommy set to 'Zyra' 'Akali'
+    resetScore()
+    openFinish()
+  } else {
+    store.choose({id: state.champion.id, smash: smash})
+    fetchChampion()
+  }
+}
+
+const openFinish = () => {
+  router.push({name:'congrats'})
+  // notify({
+  //   message: 'Jim pinged you.',
+  //   color: 'purple'
+  // })
+  // dialog({
+  //   component: TestDialog
+  // }).onOk(() => {
+  //   alert('TEST')
+  // })
+  // dialog({
+  //   title: 'Alert',
+  //   message: 'Some message'
+  // }).onOk(() => {
+  //   // console.log('OK')
+  // }).onCancel(() => {
+  //   // console.log('Cancel')
+  // }).onDismiss(() => {
+  //   // console.log('I am triggered on both OK and Cancel')
+  // })
 }
 
 const resetScore = () => {
@@ -152,11 +180,4 @@ const resetScore = () => {
   height: 50px;
   max-width: 13%;
 }
-
-/*.champion-index-card {*/
-/*  width: 100%;*/
-/*  !*max-height: 100%;*!*/
-/*  height: 50px;*/
-/*  max-width: 100%;*/
-/*}*/
 </style>

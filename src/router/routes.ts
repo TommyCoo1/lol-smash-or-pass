@@ -10,11 +10,13 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/test',
+    name:'game',
     component: () => import('pages/GamePage.vue'),
   },
   {
-    path: '/swipe',
-    component: () => import('pages/SwipeExample.vue'),
+    path: '/congrats',
+    name:'congrats',
+    component: () => import('pages/CongratsPage.vue'),
   },
 
   // Always leave this as last one,
