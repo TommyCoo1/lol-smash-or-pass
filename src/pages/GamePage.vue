@@ -46,7 +46,7 @@
         <div class="row justify-center">
           <q-btn color="grey" label="Reset"
                  @click="resetScore"
-                 fab-mini="true"/>
+                 flat/>
           <!--            <q-btn color="grey" label="Reset"-->
           <!--                   @click="resetScore"/>-->
         </div>
@@ -122,7 +122,7 @@ async function fetchChampion() {
 }
 
 const choose = (smash: boolean) => {
-  if (state.champion.id == 'Zyra') {//TODO Tommy set to 'Zyra' 'Akali'
+  if (state.champion.id == 'Annie') {//TODO Tommy set to 'Zyra' 'Annie'
     resetScore()
     openFinish()
   } else {

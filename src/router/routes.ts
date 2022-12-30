@@ -1,15 +1,15 @@
 import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
+  // {
+  //   path: '/',
+  //   component: () => import('layouts/MainLayout.vue'),
+  //   children: [
+  //     { path: 'game', component: () => import('pages/GamePage.vue') },
+  //   ],
+  // },
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: 'game', component: () => import('pages/GamePage.vue') },
-    ],
-  },
-  {
-    path: '/test',
     name:'game',
     component: () => import('pages/GamePage.vue'),
   },
