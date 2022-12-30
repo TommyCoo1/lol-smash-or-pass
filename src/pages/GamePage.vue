@@ -36,19 +36,20 @@
           </q-card>
         </div>
         <q-btn-group spread>
-          <q-btn color="red" label="Pass" icon="warning "
+          <q-btn color="red" label="Pass" icon="thumb_down"
                  @click="choose(false)"/>
-          <div>
-            <q-btn color="grey" label="Reset"
-                   @click="resetScore"/>
-            <!--            <q-btn color="grey" label="Reset"-->
-            <!--                   @click="resetScore"/>-->
-          </div>
-          <q-btn color="green" label="Smash" icon="favorite_border"
+          <q-btn color="green" label="Smash" icon="thumb_up"
                  @click="choose(true)"/>
           <!--          define state variable for champion and give -->
           <!--          <q-btn color="black" label="Test" icon="favorite_border" @click="score.increment" />-->
         </q-btn-group>
+        <div class="row justify-center">
+          <q-btn color="grey" label="Reset"
+                 @click="resetScore"
+                 fab-mini="true"/>
+          <!--            <q-btn color="grey" label="Reset"-->
+          <!--                   @click="resetScore"/>-->
+        </div>
       </div>
     </template>
   </MainLayout>
