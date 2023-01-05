@@ -23,7 +23,7 @@
             </div>
           </q-card>
           <div class="col-2">
-            <div class="row justify-center text-h4">
+            <div class="row justify-center text-h5">
               <p>Champ {{ store.championIndex }} of 162</p>
             </div>
           </div>
