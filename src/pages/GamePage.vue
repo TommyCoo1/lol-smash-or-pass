@@ -4,7 +4,8 @@
 
       <div class="row justify-center">
         <q-card class="champion-card">
-          <q-img :src="state.champion.img"
+          <q-img
+:src="state.champion.img"
                  spinner-color="white">
             <div class="absolute-bottom">
               <div class="text-h4">{{ state.champion.name }}</div>
@@ -36,17 +37,20 @@
           </q-card>
         </div>
         <q-btn-group spread>
-          <q-btn color="red" label="Pass" icon="thumb_down"
+          <q-btn
+color="red" label="Pass" icon="thumb_down"
                  @click="choose(false)"/>
-          <q-btn color="green" label="Smash" icon="thumb_up"
+          <q-btn
+color="green" label="Smash" icon="thumb_up"
                  @click="choose(true)"/>
           <!--          define state variable for champion and give -->
           <!--          <q-btn color="black" label="Test" icon="favorite_border" @click="score.increment" />-->
         </q-btn-group>
         <div class="row justify-center">
-          <q-btn color="grey" label="Reset"
-                 @click="resetScore"
-                 flat/>
+          <q-btn
+color="grey" label="Reset"
+                 flat
+                 @click="resetScore"/>
           <!--            <q-btn color="grey" label="Reset"-->
           <!--                   @click="resetScore"/>-->
         </div>
@@ -122,7 +126,7 @@ async function fetchChampion() {
 }
 
 const choose = (smash: boolean) => {
-  if (state.champion.id == 'Annie') {//TODO Tommy set to 'Zyra' 'Annie'
+  if (state.champion.id == 'Draven') {//TODO Tommy set to 'Zyra' 'Annie'
     resetScore()
     openFinish()
   } else {

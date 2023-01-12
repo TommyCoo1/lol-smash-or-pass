@@ -1,7 +1,7 @@
 <template>
   <swiper
     :effect="'cards'"
-    :grabCursor="true"
+    :grab-cursor="true"
     :modules="modules"
     class="mySwiper"
   >
@@ -25,7 +25,7 @@ import 'swiper/css/effect-cards';
 import { EffectCards } from 'swiper';
 
 export default {
-  name: "SwipeExample",
+  name: 'SwipeExample',
   components: {
     Swiper,
     SwiperSlide,

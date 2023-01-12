@@ -1,17 +1,20 @@
 <template>
   <div class="q-pa-md">
-    <q-layout view="hHh lpR fFf"
+    <q-layout
+view="hHh lpR fFf"
               class="shadow-2 rounded-borders"
               container
               style="height:1000px"
     >
-      <q-header bordered
+      <q-header
+bordered
                 class="bg-white text-primary"
       >
         <q-toolbar>
           <q-toolbar-title class="text-center">
             <q-avatar>
-              <svg xmlns="http://www.w3.org/2000/svg"
+              <svg
+xmlns="http://www.w3.org/2000/svg"
                    class="league"
                    width="30"
                    height="32"
