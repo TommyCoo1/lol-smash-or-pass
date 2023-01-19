@@ -4,9 +4,9 @@
 
       <div class="row justify-center">
         <q-card class="champion-card">
-          <q-img
-:src="state.champion.img"
-                 spinner-color="white">
+          <q-img :src="state.champion.img"
+                 spinner-color="white"
+          >
             <div class="absolute-bottom">
               <div class="text-h4">{{ state.champion.name }}</div>
               <div class="text-h6">{{ state.champion.title }}</div>
@@ -37,20 +37,31 @@
           </q-card>
         </div>
         <q-btn-group spread>
-          <q-btn
-color="red" label="Pass" icon="thumb_down"
-                 @click="choose(false)"/>
-          <q-btn
-color="green" label="Smash" icon="thumb_up"
-                 @click="choose(true)"/>
+          <q-btn color="red"
+                 label="Pass"
+                 icon="thumb_down"
+                 @click="choose(false)"
+          />
+          <q-btn color="green"
+                 label="Smash"
+                 icon="thumb_up"
+                 @click="choose(true)"
+          />
           <!--          define state variable for champion and give -->
           <!--          <q-btn color="black" label="Test" icon="favorite_border" @click="score.increment" />-->
         </q-btn-group>
         <div class="row justify-center">
-          <q-btn
-color="grey" label="Reset"
+          <q-btn color="grey"
+                 label="Reset"
                  flat
-                 @click="resetScore"/>
+                 @click="resetScore"
+          />
+          <q-btn color="grey"
+                 flat
+                 @click="switchMode">
+            <span>{{ state.isDark ? 'Light Mode' : 'Dark Mode' }}</span>
+          </q-btn>
+<!--          <q-toggle v-model="state.isDark" @toggle="switchMode" ></q-toggle>-->
           <!--            <q-btn color="grey" label="Reset"-->
           <!--                   @click="resetScore"/>-->
         </div>
@@ -60,21 +71,23 @@ color="grey" label="Reset"
 </template>
 
 <script setup
-        lang="ts">
+        lang="ts"
+>
 import MainLayout from '../layouts/MainLayout.vue'
 import {scoreStore} from 'stores/scoreStore';
 import {onBeforeMount, reactive} from 'vue';
 import {Champion} from 'src/types';
 import {api} from 'boot/axios';
 import {AxiosResponse} from 'axios';
-// import {useQuasar} from 'quasar';
+import {useQuasar} from 'quasar';
 //
 // import FinishDialog from '../components/FinishDialog.vue'
 // import TestDialog from '../components/TestDialog.vue'
 import {useRouter} from 'vue-router';
 
 interface State {
-  champion: Champion // | null
+  champion: Champion // | null,
+  isDark: boolean
 }
 
 const state = reactive<State>({
@@ -86,14 +99,24 @@ const state = reactive<State>({
     title: '',
     blurb: '',
     img: ''
-  }
+  },
+  isDark: false
 })
 // const {dialog, notify} = useQuasar()
 const store = scoreStore()
 const router = useRouter()
+const $q = useQuasar()
+const dark = $q.dark
+
+const switchMode = () => {
+  state.isDark = !state.isDark
+  $q.dark.set(state.isDark)
+}
 
 onBeforeMount(() => {
   fetchChampion()
+  // $q.dark.toggle()
+  dark.set(state.isDark)
 })
 
 // const fetchChampion = async () => {
@@ -136,7 +159,7 @@ const choose = (smash: boolean) => {
 }
 
 const openFinish = () => {
-  router.push({name:'congrats'})
+  router.push({name: 'congrats'})
   // notify({
   //   message: 'Jim pinged you.',
   //   color: 'purple'
@@ -173,7 +196,9 @@ const resetScore = () => {
 
 </script>
 
-<style lang="css" scoped>
+<style lang="css"
+       scoped
+>
 .champion-card {
   width: 100%;
   max-width: 20%;

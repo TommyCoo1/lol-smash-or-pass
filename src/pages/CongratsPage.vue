@@ -2,7 +2,7 @@
   <MainLayout>
     <template #body>
       <div class="row justify-center">
-        <h2>Congratulations you finished it! 🚀🚀🚀</h2>
+        <h2>Congratulations you finished it!! 🚀🚀🚀🚀🚀</h2>
         <q-img
 src="https://media.tenor.com/EABSY0thgFMAAAAM/party-hard-anime.gif"
                height="20%"
